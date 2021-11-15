@@ -1,0 +1,35 @@
+version: "v1.0.0"
+name: Upload Testing
+description: Simulation of uploading 1KB(30%), 5KB(20), 12KB(50%) files testing with 10 workers
+workers: 5
+s3:
+  endpoints:
+  - <s3_endpoint>
+  access_key: <access_key>
+  secret_key: <secret_key>
+  region: default
+workstages:
+- type: CreateBucket
+  bucket_prefix: pegasus-bucket
+  buckets: 2
+- type: PutObject
+  duration: 10
+  bucket_prefix: pegasus-bucket
+  buckets: 2
+  object_prefix: pegasus-file
+  objects: 10
+  sizes:
+  - size: 1KB
+    rate: 30
+  - size: 5KB
+    rate: 20
+  - size: 12KB
+    rate: 50
+- type: DeleteObject
+  bucket_prefix: pegasus-bucket
+  buckets: 2
+  object_prefix: pegasus-file
+  objects: 10
+- type: DeleteBucket
+  bucket_prefix: pegasus-bucket
+  buckets: 2

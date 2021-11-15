@@ -1,0 +1,36 @@
+version: "v1.0.0"
+name: Download Testing
+description: Simulation of downloading 5KB files testing with 10 workers
+workers: 5
+s3:
+  endpoints:
+  - <s3_endpoint>
+  access_key: <access_key>
+  secret_key: <secret_key>
+  region: default
+workstages:
+- type: CreateBucket
+  bucket_prefix: bucket
+  buckets: 2
+- type: PutObject
+  bucket_prefix: bucket
+  buckets: 2
+  object_prefix: file
+  objects: 10
+  sizes:
+  - size: 5KB
+    rate: 100
+- type: GetObject
+  duration: 10
+  bucket_prefix: bucket
+  buckets: 2
+  object_prefix: file
+  objects: 10
+- type: DeleteObject
+  bucket_prefix: bucket
+  buckets: 2
+  object_prefix: file
+  objects: 10
+- type: DeleteBucket
+  bucket_prefix: bucket
+  buckets: 2
